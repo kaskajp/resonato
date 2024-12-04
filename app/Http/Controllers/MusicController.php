@@ -28,7 +28,7 @@ class MusicController extends Controller
         if (empty($allMusicFiles)) {
             Log::info('No music files found in cache.');
         } else {
-            Log::info('Music files retrieved from cache.', ['files' => $allMusicFiles]);
+            Log::info('Music files retrieved from cache.');
         }
 
         return view('welcome', compact('allMusicFiles'));

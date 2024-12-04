@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Resonato</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -184,17 +184,19 @@
                                     currentTrackElement = trackElement;
                                     trackElement.classList.add('active');
 
-                                    // Add event listener to update current track display
+                                    // Add event listener to update current track display and document title
                                     audioElement.addEventListener('play', () => {
                                         const trackTitle = trackElement.getAttribute('data-title');
                                         currentTrackDisplay.textContent = `Now Playing: ${trackTitle}`;
                                         playPauseButton.textContent = '[pause]';
+                                        document.title = `[playing] ${trackTitle} - Resonato`; // Update document title
                                     });
 
-                                    // Add event listener to clear current track display when paused
+                                    // Add event listener to clear current track display and reset document title when paused
                                     audioElement.addEventListener('pause', () => {
                                         currentTrackDisplay.textContent = 'No track playing';
                                         playPauseButton.textContent = '[play]';
+                                        document.title = 'Resonato'; // Reset document title
                                     });
 
                                     // Add event listener to play the next track when the current one ends
@@ -224,6 +226,7 @@
                                         playTrack(nextTrack);
                                     } else {
                                         currentTrackDisplay.textContent = 'No track playing';
+                                        document.title = 'Resonato'; // Reset document title
                                     }
                                 }
 
