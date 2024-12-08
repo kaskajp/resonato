@@ -113,9 +113,21 @@
 
                         @foreach($groupedFiles as $folder => $files)
                             <div class="folder">
-                                @if($files->first()['cover'])
+                                @php
+                                    $coverExtensions = ['jpg', 'jpeg', 'png'];
+                                    $coverPath = null;
+                                    foreach ($coverExtensions as $extension) {
+                                        $potentialCoverPath = 'music' . $files->first()['drive_number'] . '/Artists/' . $files->first()['artist'] . '/' . $files->first()['album'] . '/cover.' . $extension;
+                                        if (file_exists(public_path($potentialCoverPath))) {
+                                            $coverPath = asset($potentialCoverPath);
+                                            break;
+                                        }
+                                    }
+                                @endphp
+
+                                @if($coverPath)
                                     <div class="cover-container">
-                                        <img src="{{ asset('music' . $files->first()['drive_number'] . '/Artists/' . $files->first()['artist'] . '/' . $files->first()['album'] . '/cover.jpg') }}" alt="Cover Image" class="cover" loading="lazy">
+                                        <img src="{{ $coverPath }}" alt="Cover Image" class="cover" loading="lazy">
                                     </div>
                                 @else
                                     <div class="cover-container">

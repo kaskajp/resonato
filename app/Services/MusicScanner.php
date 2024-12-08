@@ -29,7 +29,7 @@ class MusicScanner
     public function scanMusicDirectory($directory, $driveIdentifier)
     {
         $musicFiles = [];
-        $allowedExtensions = ['mp3', 'wav', 'flac'];
+        $allowedExtensions = ['mp3', 'wav', 'flac', 'm4a', 'aac', 'ogg'];
 
         if (is_dir($directory)) {
             $files = scandir($directory);
@@ -48,13 +48,16 @@ class MusicScanner
                     if (isset($fileInfo['extension']) && in_array(strtolower($fileInfo['extension']), $allowedExtensions)) {
                         $artistName = basename(dirname(dirname($filePath))); // Get the artist name
                         $albumName = basename(dirname($filePath)); // Get the album name
-                        $coverPath = dirname($filePath) . '/cover.jpg'; // Path to cover image
+
+                        // Check for cover images
+                        $coverPath = $this->findCoverImage(dirname($filePath));
+
                         $musicFiles[] = [
                             'path' => $filePath,
                             'title' => $fileInfo['basename'],
                             'album' => $albumName,
                             'artist' => $artistName,
-                            'cover' => file_exists($coverPath) ? $coverPath : null,
+                            'cover' => $coverPath,
                             'drive_number' => $driveIdentifier
                         ];
                     }
@@ -63,5 +66,17 @@ class MusicScanner
         }
 
         return $musicFiles;
+    }
+
+    private function findCoverImage($directory)
+    {
+        $coverExtensions = ['jpg', 'jpeg', 'png'];
+        foreach ($coverExtensions as $extension) {
+            $coverPath = $directory . DIRECTORY_SEPARATOR . 'cover.' . $extension;
+            if (file_exists($coverPath)) {
+                return $coverPath;
+            }
+        }
+        return null;
     }
 }
